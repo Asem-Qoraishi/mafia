@@ -60,8 +60,8 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/common_images/select_roles.png
-    - assets/game_images/godfather.png
-    - assets/game_images/mafia.png
+    - assets/game_images/
+    - assets/role_images/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
