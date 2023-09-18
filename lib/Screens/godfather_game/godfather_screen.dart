@@ -7,7 +7,7 @@ class GodfatherScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(30, 30, 30, 1),
+      backgroundColor: const Color.fromRGBO(50, 50, 50, 1),
       appBar: AppBar(
         backgroundColor: const Color.fromRGBO(0, 0, 20, 1),
         title: const Text(
