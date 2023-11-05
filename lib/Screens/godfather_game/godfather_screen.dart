@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:mafia/helpers/size_config.dart';
+import 'package:mafia/screens/about/about_game.dart';
+import 'package:mafia/screens/home/home_screen.dart';
+import 'package:mafia/screens/shared/gf_cards/last_cards_screen.dart';
+import 'package:mafia/screens/shared/select-roles/roles_screen.dart';
+import 'package:mafia/screens/shared/setting/settings.dart';
+import 'package:mafia/utils/constants/texts.dart';
+import 'package:mafia/utils/helpers/navigate_to_page.dart';
+import 'package:mafia/utils/helpers/size_config.dart';
 
 class GodfatherScreen extends StatelessWidget {
   const GodfatherScreen({super.key});
@@ -7,12 +14,21 @@ class GodfatherScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(30, 30, 30, 1),
+      backgroundColor: const Color.fromRGBO(40, 40, 45, 1),
       appBar: AppBar(
-        backgroundColor: const Color.fromRGBO(0, 0, 20, 1),
+        elevation: 0,
+        backgroundColor: const Color.fromRGBO(40, 40, 45, 1),
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back,
+          ),
+          onPressed: () {
+            navigateToPage(context, const HomeScreen());
+          },
+        ),
         title: const Text(
-          "Godfather",
-          style: TextStyle(color: Color.fromRGBO(200, 0, 0, 1)),
+          "پدر خوانده",
+          style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
       ),
@@ -24,31 +40,42 @@ class GodfatherScreen extends StatelessWidget {
               _buildCardItem(
                 cardName: "انتخاب نقش ها",
                 imageUrl: 'assets/common_images/select_roles.png',
-                onPressed: () {},
+                onPressed: () {
+                  navigateToPage(context, const SelectRolesScreen());
+                },
               ),
               SizedBox(
-                height: getProportionateScreenHeight(30),
+                height: getProportionateScreenHeight(16),
               ),
               _buildCardItem(
-                cardName: 'معرفی نقش ها',
-                imageUrl: 'assets/role_images/leon.png',
-                onPressed: () {},
+                cardName: 'کارت های آخر',
+                imageUrl: 'assets/common_images/last_cards.png',
+                onPressed: () {
+                  navigateToPage(
+                    context,
+                    const GodfatherLastCardsScreen(),
+                  );
+                },
               ),
               SizedBox(
-                height: getProportionateScreenHeight(30),
+                height: getProportionateScreenHeight(16),
               ),
               _buildCardItem(
                 cardName: 'درباره بازی',
                 imageUrl: 'assets/game_images/godfather.png',
-                onPressed: () {},
+                onPressed: () {
+                  navigateToPage(context, AboutGameScreen(gameType: GameType.GODFATHER));
+                },
               ),
               SizedBox(
-                height: getProportionateScreenHeight(30),
+                height: getProportionateScreenHeight(16),
               ),
               _buildCardItem(
                 cardName: 'تنظیمات',
-                imageUrl: 'assets/common_images/select_roles.png',
-                onPressed: () {},
+                imageUrl: '',
+                onPressed: () {
+                  navigateToPage(context, SettingsScreen());
+                },
               ),
             ],
           ),
@@ -63,16 +90,15 @@ class GodfatherScreen extends StatelessWidget {
     required VoidCallback onPressed,
   }) {
     return ElevatedButton(
+      clipBehavior: Clip.hardEdge,
       style: ElevatedButton.styleFrom(
-        padding: const EdgeInsets.all(20.0),
-        backgroundColor: const Color.fromRGBO(0, 0, 20, 1),
-        elevation: 3,
-        shadowColor: const Color.fromRGBO(200, 0, 0, 1),
+        padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 20),
+        backgroundColor: const Color.fromRGBO(20, 20, 25, 1),
+        elevation: 0,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(16),
           side: const BorderSide(
-            color: Color.fromRGBO(150, 0, 0, 1),
-            width: 1.5,
+            color: Colors.transparent,
           ),
         ),
       ),
@@ -80,16 +106,25 @@ class GodfatherScreen extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Image(
-            width: getProportionateScreenWidht(160),
-            height: getProportionateScreenHeight(160),
-            fit: BoxFit.fill,
-            image: AssetImage(imageUrl),
-          ),
+          cardName == 'تنظیمات'
+              ? Icon(
+                  Icons.settings,
+                  size: getProportionateScreenHeight(110),
+                )
+              : Container(
+                  width: getProportionateScreenWidht(160),
+                  height: getProportionateScreenHeight(160),
+                  clipBehavior: Clip.hardEdge,
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
+                  child: Image(
+                    fit: BoxFit.fill,
+                    image: AssetImage(imageUrl),
+                  ),
+                ),
           Text(
             cardName,
-            style: TextStyle(
-              fontSize: getProportionateScreenWidht(22),
+            style: const TextStyle(
+              fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
           )

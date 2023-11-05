@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mafia/Screens/home/components/games_card.dart';
-import 'package:mafia/helpers/size_config.dart';
+import 'package:mafia/screens/godfather_game/godfather_screen.dart';
+import 'package:mafia/screens/mafia_game/mafia_screen.dart';
+import 'package:mafia/utils/helpers/navigate_to_page.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -8,14 +10,20 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(50, 50, 50, 1),
+      backgroundColor: const Color.fromRGBO(40, 40, 45, 1),
       appBar: AppBar(
+        elevation: 0,
+        leading: null,
         title: const Text(
-          'Mafia Games',
-          style: TextStyle(fontSize: 24, color: Color.fromRGBO(200, 0, 0, 1)),
+          'بازی های مافیا',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         centerTitle: true,
-        backgroundColor: const Color.fromRGBO(0, 0, 20, 1),
+        backgroundColor: const Color.fromRGBO(40, 40, 45, 1),
       ),
       body: SizedBox(
         width: double.infinity,
@@ -24,22 +32,17 @@ class HomeScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(
-                height: getProportionateScreenHeight(30),
-              ),
               GamesCard(
-                onPressed: () {},
+                onPressed: () {
+                  navigateToPage(context, const GodfatherScreen());
+                },
                 imageUrl: 'assets/game_images/godfather.png',
               ),
-              SizedBox(
-                height: getProportionateScreenHeight(30),
-              ),
               GamesCard(
-                onPressed: () {},
+                onPressed: () {
+                  navigateToPage(context, const MafiaScreen());
+                },
                 imageUrl: 'assets/game_images/mafia.png',
-              ),
-              SizedBox(
-                height: getProportionateScreenHeight(30),
               ),
             ],
           ),
