@@ -1,5 +1,6 @@
 import 'package:mafia/Models/last_card.model.dart';
 import 'package:mafia/Models/player.model.dart';
+import 'package:mafia/utils/constants/texts.dart';
 
 enum Side {
   mafia,
@@ -17,16 +18,33 @@ class GodfatherConstants {
   static List<PlayerModel> get players {
     List<PlayerModel> players = [];
     var rolesImagePath = 'assets/role_images';
+
     for (var role in _roles[Side.mafia]!) {
-      var player = PlayerModel(side: Side.mafia, role: role, imagePath: '$rolesImagePath/$role.png');
+      var player = PlayerModel(
+          side: Side.mafia,
+          role: role,
+          imagePath: '$rolesImagePath/$role.png',
+          description: godfatherRolesDescriptions[role] ?? 'این نقش معرفی نشده است');
+
       players.add(player);
     }
+
     for (var role in _roles[Side.citizin]!) {
-      var player = PlayerModel(side: Side.citizin, role: role, imagePath: '$rolesImagePath/$role.png');
+      var player = PlayerModel(
+          side: Side.citizin,
+          role: role,
+          imagePath: '$rolesImagePath/$role.png',
+          description: godfatherRolesDescriptions[role] ?? 'این نقش معرفی نشده است');
+
       players.add(player);
     }
+
     for (var role in _roles[Side.independent]!) {
-      var player = PlayerModel(side: Side.independent, role: role, imagePath: '$rolesImagePath/$role.png');
+      var player = PlayerModel(
+          side: Side.independent,
+          role: role,
+          imagePath: '$rolesImagePath/$role.png',
+          description: godfatherRolesDescriptions[role] ?? 'این نقش معرفی نشده است');
       players.add(player);
     }
     return players;

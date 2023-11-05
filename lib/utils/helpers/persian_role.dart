@@ -1,10 +1,10 @@
 String toPersian(String role) {
   Map<String, String> roles = {
-    'citizen': 'شهروند',
+    'citizen': 'شهروند ساده',
     'citizen_kane': 'همشهری کین',
     'leon': 'حرفه یی',
-    'constantine': 'فرشته نجات',
-    'doctor_watson': 'داکتر شهر',
+    'constantine': 'کنستانتین',
+    'doctor_watson': 'داکتر واتسون',
     'nostradamus': 'نوستراداموس',
     'jack_sparrow': 'جک اسپارو',
     'godfather': 'پدرخوانده',
@@ -17,3 +17,9 @@ String toPersian(String role) {
   // }
   return persinaRole!;
 }
+
+
+
+// String aboutRole() {
+//   return 
+// }

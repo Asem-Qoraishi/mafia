@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:mafia/Models/player.model.dart';
-import 'package:mafia/constants/godfather.dart';
-import 'package:mafia/helpers/persian_role.dart';
-import 'package:mafia/helpers/size_config.dart';
+import 'package:mafia/data/local/roles_sharedpreferences.dart';
+import 'package:mafia/utils/constants/godfather.dart';
+import 'package:mafia/utils/helpers/card_border_color.dart';
+import 'package:mafia/utils/helpers/navigate_to_page.dart';
+import 'package:mafia/utils/helpers/persian_role.dart';
+import 'package:mafia/utils/helpers/size_config.dart';
 import 'package:mafia/providers/player_provider.dart';
+import 'package:mafia/screens/shared/show_roles/show_roles.dart';
 import 'package:provider/provider.dart';
 
 class SelectRolesScreen extends StatefulWidget {
@@ -20,21 +24,48 @@ class _SelectRolesScreenState extends State<SelectRolesScreen> {
   @override
   Widget build(BuildContext context) {
     playerProvider = Provider.of<PlayerProvider>(context, listen: false);
+    playerProvider.getDefaultData();
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(50, 50, 50, 1),
+      backgroundColor: const Color.fromRGBO(40, 40, 45, 1),
       floatingActionButton: FloatingActionButton(
           backgroundColor: const Color.fromRGBO(200, 0, 0, 1),
           child: const Icon(
             Icons.arrow_forward,
-            // color: ,
           ),
-          onPressed: () {}),
+          onPressed: () {
+            if (playerProvider.selectedPlayers.isEmpty) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text(
+                    '!هیج نقشی انتخاب نشده',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.yellow),
+                  ),
+                  duration: Duration(seconds: 1),
+                ),
+              );
+              return;
+            }
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ShowRoles(selectedPlayers: playerProvider.selectedPlayers),
+              ),
+            ).then((value) {
+              playerProvider.getDefaultData();
+            });
+          }),
       appBar: AppBar(
+        elevation: 0,
         toolbarHeight: 50,
-        backgroundColor: const Color.fromRGBO(0, 0, 20, 1),
+        backgroundColor: const Color.fromRGBO(40, 40, 45, 1),
         title: const Text(
           "انتخاب نقش ها",
-          style: TextStyle(color: Color.fromRGBO(200, 0, 0, 1), fontWeight: FontWeight.bold),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         centerTitle: true,
         actions: [
@@ -58,6 +89,7 @@ class _SelectRolesScreenState extends State<SelectRolesScreen> {
         builder: (context, playerProvider, _) {
           this.playerProvider = playerProvider;
           var selectedPlayers = playerProvider.selectedPlayers;
+
           return Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -68,17 +100,8 @@ class _SelectRolesScreenState extends State<SelectRolesScreen> {
                     child: Wrap(alignment: WrapAlignment.center, clipBehavior: Clip.hardEdge, spacing: 8, children: [
                       ...selectedPlayers.map(
                         (player) {
-                          Color borderColor;
-                          switch (player.side) {
-                            case Side.mafia:
-                              borderColor = const Color.fromRGBO(200, 0, 0, 1);
-                              break;
-                            case Side.independent:
-                              borderColor = Colors.yellow;
-                              break;
-                            default:
-                              borderColor = Colors.lightBlue;
-                          }
+                          Color borderColor = cardBorderColor(player.side);
+
                           return Chip(
                             label: Text(
                               toPersian(player.role),
@@ -108,9 +131,10 @@ class _SelectRolesScreenState extends State<SelectRolesScreen> {
                     margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        color: const Color.fromRGBO(30, 30, 30, 1),
-                        border: Border.all(color: const Color.fromRGBO(200, 0, 0, 1), width: 2)),
+                      borderRadius: BorderRadius.circular(16),
+                      color: const Color.fromRGBO(20, 20, 25, 0.9),
+                      border: Border.all(color: Colors.transparent, width: 0),
+                    ),
                     child: _buildRolesSection(roles: GodfatherConstants.players),
                   ),
                 ),
@@ -169,17 +193,7 @@ class _SelectRolesScreenState extends State<SelectRolesScreen> {
     var selectedPlayers = playerProvider.selectedPlayers;
     List<String> roles = selectedPlayers.map((e) => e.role).toList();
     var isSelected = player.role != 'citizen' && roles.contains(player.role) ? true : false;
-    Color borderColor;
-    switch (player.side) {
-      case Side.mafia:
-        borderColor = Colors.red;
-        break;
-      case Side.independent:
-        borderColor = Colors.yellow;
-        break;
-      default:
-        borderColor = Colors.blue;
-    }
+    Color borderColor = cardBorderColor(player.side);
     return ElevatedButton(
       onPressed: isSelected
           ? null
@@ -224,12 +238,19 @@ class _SelectRolesScreenState extends State<SelectRolesScreen> {
     return AlertDialog(
       icon: const Icon(Icons.cleaning_services_rounded, size: 48, color: Colors.orange),
       actionsAlignment: MainAxisAlignment.spaceEvenly,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      backgroundColor: const Color.fromRGBO(50, 50, 55, 0.9),
       actions: [
         TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: const Text('نخیر'),
+          child: const Text(
+            'نخیر',
+            style: TextStyle(fontSize: 18),
+          ),
         ),
         ElevatedButton(
           onPressed: () {
@@ -237,11 +258,15 @@ class _SelectRolesScreenState extends State<SelectRolesScreen> {
             Navigator.of(context).pop();
           },
           style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red,
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              backgroundColor: const Color.fromRGBO(200, 0, 0, 1),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               )),
-          child: const Text('بله'),
+          child: const Text(
+            'بله',
+            style: TextStyle(fontSize: 18),
+          ),
         )
       ],
       title: const Text(
@@ -254,10 +279,6 @@ class _SelectRolesScreenState extends State<SelectRolesScreen> {
         textAlign: TextAlign.center,
         style: TextStyle(color: Color.fromRGBO(200, 0, 0, 1)),
       ),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
-      backgroundColor: Colors.white.withOpacity(0.8),
     );
   }
 }
